@@ -259,11 +259,3 @@ each automates a single stage — extraction, retrieval-based QA, or point-in-ti
 independently. None maintains a persistent compliance state that survives regulatory change or
 evidence expiry, and none gates status changes through an auditable, human-approved remediation
 loop. This project closes that gap.
-
-## License
-
-TBD
-
-## Author
-
-*(add your name / student ID / institution here)*
