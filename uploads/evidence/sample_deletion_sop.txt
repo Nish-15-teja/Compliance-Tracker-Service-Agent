@@ -1,0 +1,3 @@
+Acme Corp Data Deletion Standard Operating Procedure.
+Section 1: Data Erasure Request Processing.
+All customer erasure requests received via support portal are processed, confirmed, and purged from production databases within 30 days of receipt.

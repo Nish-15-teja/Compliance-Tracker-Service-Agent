@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "clause_identifier": "Article 17",
+    "old_text": "Organizations must delete customer data within 30 days of receiving a verified deletion request.",
+    "new_text": "Organizations must delete customer data within 3 days of receiving a verified deletion request.",
+    "expected_change_type": "MODIFIED",
+    "expected_change_significance": "significant_change",
+    "is_deadline_case": true,
+    "description": "Critical deadline tightening from 30 days to 3 days"
+  },
+  {
+    "id": 2,
+    "clause_identifier": "Article 33",
+    "old_text": "The controller shall notify the authority of any breach within thirty days of becoming aware.",
+    "new_text": "The controller shall notify the authority of any breach within seventy-two hours of becoming aware.",
+    "expected_change_type": "MODIFIED",
+    "expected_change_significance": "significant_change",
+    "is_deadline_case": true,
+    "description": "Paraphrased deadline tightening with distinct wording"
+  },
+  {
+    "id": 3,
+    "clause_identifier": "Article 12",
+    "old_text": "The controller should provide clear notices to data subjects.",
+    "new_text": "The controller should provide clear cosmetic notices to data subjects (minor notification).",
+    "expected_change_type": "MODIFIED",
+    "expected_change_significance": "minor_wording",
+    "is_deadline_case": false,
+    "description": "Cosmetic wording and phrasing refinement"
+  },
+  {
+    "id": 4,
+    "clause_identifier": "Article 30",
+    "old_text": "All employee training records must be retained for at least three years.",
+    "new_text": "All employee training records must be retained for at least three years (minor typo corrected).",
+    "expected_change_type": "MODIFIED",
+    "expected_change_significance": "minor_wording",
+    "is_deadline_case": false,
+    "description": "Typo correction without altering compliance obligation"
+  },
+  {
+    "id": 5,
+    "clause_identifier": "Article 3",
+    "old_text": "This policy applies to full-time employees located in the primary office.",
+    "new_text": "This policy applies to all full-time, part-time, and contractor personnel across all substantive regional entities.",
+    "expected_change_type": "MODIFIED",
+    "expected_change_significance": "significant_change",
+    "is_deadline_case": false,
+    "description": "Substantive scope expansion to new personnel and entities"
+  },
+  {
+    "id": 6,
+    "clause_identifier": "Article 37",
+    "old_text": "Data protection officers must report directly to executive management.",
+    "new_text": "Data protection officers must report directly to executive management.",
+    "expected_change_type": "UNCHANGED",
+    "expected_change_significance": "minor_wording",
+    "is_deadline_case": false,
+    "description": "Exact text match across regulation versions"
+  },
+  {
+    "id": 7,
+    "clause_identifier": "Article 40",
+    "old_text": "Annual compliance audits are recommended for high-risk data processing operations.",
+    "new_text": "Annual compliance audits are cosmetic recommended practices for high-risk data processing operations.",
+    "expected_change_type": "MODIFIED",
+    "expected_change_significance": "minor_wording",
+    "is_deadline_case": false,
+    "description": "Stylistic advisory wording modification"
+  },
+  {
+    "id": 8,
+    "clause_identifier": "Article 83",
+    "old_text": "Violations may incur fines up to 10,000 EUR per non-compliant instance.",
+    "new_text": "Violations may incur substantive fines up to 500,000 EUR per non-compliant instance.",
+    "expected_change_type": "MODIFIED",
+    "expected_change_significance": "significant_change",
+    "is_deadline_case": false,
+    "description": "Substantive penalty threshold increase"
+  }
+]

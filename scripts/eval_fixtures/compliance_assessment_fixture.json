@@ -1,0 +1,152 @@
+[
+  {
+    "id": 1,
+    "requirement_text": "The organization must maintain and execute automated customer data deletion procedures within 30 days.",
+    "obligation_strength": "mandatory",
+    "required_evidence_description": "Data deletion procedure policy and verification logs.",
+    "evidence_doc_title": "Data Deletion & Retention Policy 2024",
+    "evidence_text": "All customer data is deleted within 30 days of receiving a verified request, and data deletion procedure verification log records are stored in the compliance audit database.",
+    "expected_status": "COMPLIANT",
+    "notes": "Exact match with comprehensive policy and execution logs"
+  },
+  {
+    "id": 2,
+    "requirement_text": "The organization must implement end-to-end encryption for all customer personal data in transit and at rest.",
+    "obligation_strength": "mandatory",
+    "required_evidence_description": "Cryptographic architecture design and encryption key management logs.",
+    "evidence_doc_title": "Information Security Architecture Standard",
+    "evidence_text": "All customer personal data is encrypted at rest using AES-256 and in transit using TLS 1.3 across all production endpoints.",
+    "expected_status": "COMPLIANT",
+    "notes": "Directly satisfies encryption requirement"
+  },
+  {
+    "id": 3,
+    "requirement_text": "The controller must maintain a designated Data Protection Officer with direct reporting to leadership.",
+    "obligation_strength": "mandatory",
+    "required_evidence_description": "DPO appointment charter and organizational reporting structure.",
+    "evidence_doc_title": "Corporate Governance & DPO Charter",
+    "evidence_text": "The Board has formally designated the Chief Privacy Counsel as Data Protection Officer with independent reporting to the Board of Directors.",
+    "expected_status": "COMPLIANT",
+    "notes": "Directly satisfies DPO appointment"
+  },
+  {
+    "id": 4,
+    "requirement_text": "Organizations must conduct annual third-party penetration testing on external API gateways.",
+    "obligation_strength": "mandatory",
+    "required_evidence_description": "Third-party penetration testing executive summary and remediation report.",
+    "evidence_doc_title": "2024 Annual External Penetration Test Report",
+    "evidence_text": "Independent security audit firm completed full penetration testing on external API endpoints with zero critical vulnerabilities.",
+    "expected_status": "COMPLIANT",
+    "notes": "Directly satisfies pentesting obligation"
+  },
+  {
+    "id": 5,
+    "requirement_text": "The controller must execute Data Processing Agreements (DPA) with all third-party sub-processors.",
+    "obligation_strength": "mandatory",
+    "required_evidence_description": "Signed Data Processing Addenda with vendor registry.",
+    "evidence_doc_title": "Vendor Risk Management & DPA Repository",
+    "evidence_text": "Standard contractual clauses and signed DPA addenda are executed and archived for 100% of approved third-party vendors.",
+    "expected_status": "COMPLIANT",
+    "notes": "Directly satisfies vendor DPA requirement"
+  },
+  {
+    "id": 6,
+    "requirement_text": "The organization must maintain documented data deletion procedures with quarterly audit logs.",
+    "obligation_strength": "mandatory",
+    "required_evidence_description": "Formal data deletion policy and audit logs.",
+    "evidence_doc_title": "Draft Privacy Framework",
+    "evidence_text": "The organization has a draft procedure and preliminary guidelines for deletion, but operational verification logs are currently partial and under development.",
+    "expected_status": "PARTIALLY_COMPLIANT",
+    "notes": "Draft procedure with partial implementation"
+  },
+  {
+    "id": 7,
+    "requirement_text": "The organization must conduct mandatory annual security awareness training for all employees.",
+    "obligation_strength": "mandatory",
+    "required_evidence_description": "LMS training completion records and curriculum syllabus.",
+    "evidence_doc_title": "HR Training Status Report",
+    "evidence_text": "Security awareness training curriculum has been established; 68% of staff completed the training as of Q3, representing partial completion.",
+    "expected_status": "PARTIALLY_COMPLIANT",
+    "notes": "Partial rollout of required training"
+  },
+  {
+    "id": 8,
+    "requirement_text": "Incident response plan must be tested through an annual simulation drill.",
+    "obligation_strength": "conditional",
+    "required_evidence_description": "Tabletop exercise post-mortem report and action items.",
+    "evidence_doc_title": "Incident Management Guidelines",
+    "evidence_text": "Draft tabletop exercise notes exist; full execution drill was partial and scheduled for completion next quarter.",
+    "expected_status": "PARTIALLY_COMPLIANT",
+    "notes": "Incomplete tabletop drill"
+  },
+  {
+    "id": 9,
+    "requirement_text": "The organization must conduct Data Protection Impact Assessments (DPIA) prior to deploying biometric AI processing.",
+    "obligation_strength": "mandatory",
+    "required_evidence_description": "Completed DPIA signed by DPO and lead architect.",
+    "evidence_doc_title": "General AI Ethics Whitepaper",
+    "evidence_text": "Discussion of theoretical artificial intelligence principles without any formal DPIA document or risk assessment for biometric systems.",
+    "expected_status": "EVIDENCE_MISSING",
+    "notes": "Topically related AI whitepaper, but DPIA is missing (False Positive Test 1)"
+  },
+  {
+    "id": 10,
+    "requirement_text": "The controller must maintain 24/7 automated security log monitoring with 15-minute alert triage.",
+    "obligation_strength": "mandatory",
+    "required_evidence_description": "SOC service level agreement and SIEM monitoring configurations.",
+    "evidence_doc_title": "Office Physical Badge Access Policy",
+    "evidence_text": "Physical security guards monitor building entry turnstiles and visitor badges during regular business hours from 8 AM to 6 PM.",
+    "expected_status": "EVIDENCE_MISSING",
+    "notes": "Physical security document provided for digital SIEM monitoring obligation (False Positive Test 2)"
+  },
+  {
+    "id": 11,
+    "requirement_text": "The organization must maintain an offsite immutable backup with 4-hour recovery time objective (RTO).",
+    "obligation_strength": "mandatory",
+    "required_evidence_description": "Disaster recovery runbook and immutable cloud backup verification.",
+    "evidence_doc_title": "Employee Laptop Refresh Policy",
+    "evidence_text": "IT department provisions replacement laptops for employees every 36 months with standard operating system images.",
+    "expected_status": "EVIDENCE_MISSING",
+    "notes": "Hardware lifecycle policy provided for DR/backup obligation (False Positive Test 3)"
+  },
+  {
+    "id": 12,
+    "requirement_text": "The controller must notify data protection authorities of high-risk personal data breaches within 72 hours.",
+    "obligation_strength": "mandatory",
+    "required_evidence_description": "Breach notification protocol and regulatory submission templates.",
+    "evidence_doc_title": "",
+    "evidence_text": "",
+    "expected_status": "EVIDENCE_MISSING",
+    "notes": "No evidence uploaded at all"
+  },
+  {
+    "id": 13,
+    "requirement_text": "Supervisory board must review and approve annual cybersecurity budgets.",
+    "obligation_strength": "mandatory",
+    "required_evidence_description": "Board minutes documenting cybersecurity budget approval.",
+    "evidence_doc_title": "Cafeteria Vendor Contract",
+    "evidence_text": "The catering company agrees to provide daily lunch services for corporate headquarters staff.",
+    "expected_status": "EVIDENCE_MISSING",
+    "notes": "Completely irrelevant vendor contract"
+  },
+  {
+    "id": 14,
+    "requirement_text": "Customer consent records must be stored with cryptographic timestamping for 5 years.",
+    "obligation_strength": "mandatory",
+    "required_evidence_description": "Consent management database schema and timestamping logs.",
+    "evidence_doc_title": "Marketing Newsletter Guidelines",
+    "evidence_text": "Marketing emails should have engaging subject lines and clear promotional branding.",
+    "expected_status": "EVIDENCE_MISSING",
+    "notes": "Marketing guidelines provided for consent record keeping"
+  },
+  {
+    "id": 15,
+    "requirement_text": "Access controls must enforce multi-factor authentication (MFA) for all administrative interfaces.",
+    "obligation_strength": "mandatory",
+    "required_evidence_description": "IAM policy enforcing hardware/software MFA on privileged accounts.",
+    "evidence_doc_title": "Identity and Access Management Policy",
+    "evidence_text": "All administrative console access and privileged user accounts are required to use FIDO2 or authenticator-based multi-factor authentication (MFA).",
+    "expected_status": "COMPLIANT",
+    "notes": "Directly satisfies MFA requirement"
+  }
+]

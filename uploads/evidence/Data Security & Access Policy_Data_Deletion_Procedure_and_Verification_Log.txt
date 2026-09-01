@@ -1,0 +1,30 @@
+DATA DELETION PROCEDURE AND VERIFICATION LOG
+
+Organization: Acme Corp
+Document Title: Data Deletion Procedure and Verification Log
+Version: 1.0
+Effective Date: 2026-09-01
+Review Date: 2027-09-01
+
+1. PURPOSE
+This document defines the procedure for securely deleting personal data and organizational data when deletion is required.
+
+2. DATA DELETION PROCEDURE
+The organization must maintain documented data deletion procedures.
+Authorized personnel must verify the deletion request before deleting data.
+Personal data must be deleted from primary systems and applicable backups according to the approved retention policy.
+Deletion activities must be performed using approved secure deletion methods.
+
+3. VERIFICATION
+After deletion, the responsible employee must verify that the required data has been removed.
+The verification result must be recorded in a deletion verification log.
+
+4. DELETION VERIFICATION LOG
+Date: 2026-09-01
+System: Customer Data Repository
+Action: Secure deletion procedure completed
+Verification: Deletion verified by authorized personnel
+Status: COMPLETED
+
+5. RECORD RETENTION
+Deletion and verification logs must be retained as evidence of compliance.

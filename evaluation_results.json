@@ -1,0 +1,50 @@
+{
+  "obligation_extraction": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "strength_accuracy": 0.8462,
+    "strength_severity_independence_rate": 1.0,
+    "sample_count": 18
+  },
+  "clause_extraction": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0
+  },
+  "compliance_assessment": {
+    "accuracy": 0.8,
+    "precision": 0.6667,
+    "recall": 1.0,
+    "f1_score": 0.8,
+    "false_positive_rate": 0.0,
+    "sample_count": 15
+  },
+  "change_detection_4step_pipeline": {
+    "overall_accuracy": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "deadline_change_case_accuracy": 1.0,
+    "sample_count": 8
+  },
+  "change_detection_cosine_similarity_baseline": {
+    "overall_accuracy": 0.625,
+    "precision": 1.0,
+    "recall": 0.25,
+    "deadline_change_case_accuracy": 0.0,
+    "sample_count": 8
+  },
+  "impact_propagation": {
+    "precision": 1.0,
+    "unrelated_records_untouched": 1.0
+  },
+  "human_in_the_loop": {
+    "auto_applied_percentage": 0.5455,
+    "human_review_required_percentage": 0.4545,
+    "approval_rate": 0.7,
+    "edit_rate": 0.2,
+    "rejection_rate": 0.1,
+    "sample_count": 22,
+    "note": "Computed from 22 review-queue interaction events in scripts/eval_fixtures/hitl_fixture.json"
+  }
+}

@@ -1,0 +1,5 @@
+Section 1: General Company Overview
+Acme Corp provides cloud platform solutions.
+---PAGE---
+Section 2: Data Retention & Deletion Policy
+All customer personal data deletion requests are processed within 30 days of submission into audit logs.

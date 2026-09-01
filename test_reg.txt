@@ -1,0 +1,5 @@
+Article 1 General Provisions.
+Organizations must implement security controls.
+
+Article 17 Right to erasure.
+Organizations must delete customer data within 30 days.

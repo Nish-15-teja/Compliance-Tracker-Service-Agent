@@ -1,0 +1,2 @@
+Section 1: Access Control Policy
+Formal user registration and de-registration procedure is implemented with quarterly access audit logs.
