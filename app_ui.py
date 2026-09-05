@@ -2,6 +2,7 @@ import streamlit as st
 import requests
 import json
 import os
+from datetime import datetime
 import pandas as pd
 
 API_BASE_URL = os.getenv("API_BASE_URL", "http://127.0.0.1:8000")
@@ -385,6 +386,24 @@ with tabs[2]:
                     color = status_colors.get(ob["compliance_status"], "gray")
                     c3.markdown(f"**Compliance Status:** :{color}[**{ob['compliance_status']}**]")
                     c4.markdown(f"**Workflow / Evidence:** `{ob['workflow_state']}` / `{ob['evidence_state']}`")
+
+                    with st.expander(f"📜 Audit History Timeline — Obligation #{ob['id']}"):
+                        try:
+                            h_res = requests.get(f"{API_BASE_URL}/obligations/{ob['id']}/history", timeout=5)
+                            if h_res.status_code == 200:
+                                h_list = h_res.json().get("history", [])
+                                if not h_list:
+                                    st.caption("No state transitions recorded yet.")
+                                else:
+                                    for h_item in h_list:
+                                        ts = h_item.get('created_at', '')[:19].replace('T', ' ')
+                                        st.markdown(f"**{ts}** — `{h_item['field_changed']}`: `{h_item['old_value']}` ➔ `{h_item['new_value']}` *(Trigger: `{h_item['trigger_type']}`, Status: `{h_item['approval_status']}`)*")
+                                        if h_item.get('reasoning'):
+                                            st.caption(f"Reason: {h_item['reasoning']}")
+                            else:
+                                st.caption("Could not load history.")
+                        except Exception as e:
+                            st.caption(f"History query error: {e}")
                     
                     if f"last_eval_{ob['id']}" in st.session_state:
                         last_ev = st.session_state[f"last_eval_{ob['id']}"]
@@ -469,7 +488,42 @@ with tabs[3]:
                         
                         if item.get("remediation_proposal"):
                             rem = item["remediation_proposal"]
-                            st.warning(f"**🛠️ Remediation Proposal** (Priority: `{rem.get('priority', 'medium').upper()}` | Owner: `{rem.get('suggested_owner', 'Compliance')}` | Deadline: `{rem.get('suggested_deadline', 'N/A')}`):\n\n**Action:** {rem.get('recommended_action', 'N/A')}")
+                            with st.expander(f"🛠️ Remediation Proposal #{rem['id']} (Review & Edit)", expanded=True):
+                                st.caption(f"**Gap Explanation:** {rem.get('gap_explanation', 'Compliance gap identified.')}")
+                                
+                                edit_action = st.text_area(f"Recommended Action #{item['transition_id']}", value=rem.get("recommended_action", ""), key=f"act_{item['transition_id']}")
+                                
+                                col_e1, col_e2, col_e3 = st.columns(3)
+                                with col_e1:
+                                    edit_owner = st.text_input(f"Suggested Owner #{item['transition_id']}", value=rem.get("suggested_owner", ""), key=f"own_{item['transition_id']}")
+                                with col_e2:
+                                    default_date = None
+                                    if rem.get("suggested_deadline"):
+                                        try:
+                                            default_date = datetime.fromisoformat(rem["suggested_deadline"]).date()
+                                        except Exception:
+                                            pass
+                                    edit_deadline = st.date_input(f"Suggested Deadline #{item['transition_id']}", value=default_date, key=f"dead_{item['transition_id']}")
+                                with col_e3:
+                                    prio_opts = ["low", "medium", "high", "critical"]
+                                    curr_prio = rem.get("priority", "medium").lower()
+                                    prio_idx = prio_opts.index(curr_prio) if curr_prio in prio_opts else 1
+                                    edit_priority = st.selectbox(f"Priority #{item['transition_id']}", prio_opts, index=prio_idx, key=f"prio_{item['transition_id']}")
+                                    
+                                if st.button(f"💾 Save Edits #{item['transition_id']}", key=f"save_btn_{item['transition_id']}", use_container_width=True):
+                                    edit_payload = {
+                                        "recommended_action": edit_action,
+                                        "suggested_owner": edit_owner,
+                                        "suggested_deadline": edit_deadline.strftime("%Y-%m-%d") if edit_deadline else None,
+                                        "priority": edit_priority,
+                                        "human_edit_notes": "Updated by reviewer in web console"
+                                    }
+                                    save_res = requests.put(f"{API_BASE_URL}/remediation/{rem['id']}/edit", json=edit_payload)
+                                    if save_res.status_code == 200:
+                                        st.success("Edits saved successfully.")
+                                        st.rerun()
+                                    else:
+                                        st.error(f"Failed to save edits: {save_res.text}")
                             
                         b1, b2 = st.columns(2)
                         with b1:

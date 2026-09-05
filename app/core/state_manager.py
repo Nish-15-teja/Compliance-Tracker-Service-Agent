@@ -30,7 +30,7 @@ class StateManager:
     Manages live state, policy-gated transition routing, and append-only state history.
     """
 
-    def record_assessment(self, obligation_id: int, assessment_result: Dict[str, Any], db: Session) -> Dict[str, Any]:
+    def record_assessment(self, obligation_id: int, assessment_result: Dict[str, Any], db: Session, trigger_type: str = "initial_check") -> Dict[str, Any]:
         obligation = db.query(Obligation).filter(Obligation.id == obligation_id).first()
         if not obligation:
             raise ValueError(f"Obligation with ID {obligation_id} not found.")
@@ -72,14 +72,19 @@ class StateManager:
             record.last_assessed_at = datetime.now(timezone.utc)
             db.commit()
 
+        evidence_doc_ids = [ev["evidence_document_id"] for ev in assessment_result.get("evidence_used", []) if "evidence_document_id" in ev]
+
+        resolved_trigger = "manual_reassessment" if (trigger_type == "initial_check" and old_status != "NOT_CHECKED") else trigger_type
+
         # Insert append-only state transition record
         transition = StateTransition(
             compliance_record_id=record.id,
             field_changed="compliance_status",
             old_value=old_status,
             new_value=proposed_status,
-            trigger_type="initial_check",
-            trigger_description=f"Assessment run with confidence {confidence}",
+            trigger_type=resolved_trigger,
+            trigger_description=f"Assessment run with confidence {confidence} (trigger: {resolved_trigger})",
+            evidence_ids=evidence_doc_ids if evidence_doc_ids else None,
             reasoning=reasoning,
             confidence_score=confidence,
             required_human_approval=requires_approval,
@@ -89,6 +94,17 @@ class StateManager:
         db.add(transition)
         db.commit()
         db.refresh(transition)
+
+        # Insert one EvidenceLink row per entry in evidence_used (Fix 3)
+        for ev in assessment_result.get("evidence_used", []):
+            link = EvidenceLink(
+                compliance_record_id=record.id,
+                evidence_document_id=ev["evidence_document_id"],
+                matched_excerpt=ev.get("matched_excerpt", ""),
+                confidence_score=ev.get("confidence_score", confidence)
+            )
+            db.add(link)
+        db.commit()
 
         if proposed_status in ["NON_COMPLIANT", "EVIDENCE_MISSING"]:
             rem_res = remediation_agent.generate_remediation(

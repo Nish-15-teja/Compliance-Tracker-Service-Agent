@@ -171,15 +171,52 @@ def propagate_impact(new_regulation_id: int, db: Session) -> Dict[str, Any]:
     added_obligations = []
 
     for log in change_logs:
-        if log.change_type in ["MODIFIED", "REMOVED"] and log.old_clause_id:
-            # Find obligations linked to old_clause_id
+        if log.change_type == "MODIFIED" and log.old_clause_id and log.new_clause_id:
+            old_obligations = db.query(Obligation).filter(Obligation.source_clause_id == log.old_clause_id).all()
+            for old_ob in old_obligations:
+                rec = db.query(ComplianceRecord).filter(ComplianceRecord.obligation_id == old_ob.id).first()
+                if not rec:
+                    continue
+
+                # Re-extract obligation(s) from the NEW clause text (Fix 5)
+                new_obs = extract_obligations(clause_id=log.new_clause_id, db=db)
+
+                if new_obs:
+                    new_ob = new_obs[0]
+                    # Repoint the EXISTING compliance record to the new obligation (preserves state_transitions history)
+                    rec.obligation_id = new_ob.id
+                    db.commit()
+
+                    for extra_ob in new_obs[1:]:
+                        added_obligations.append(extra_ob.id)
+
+                    state_manager.trigger_reevaluation(
+                        compliance_record_id=rec.id,
+                        reason=log.change_reason or "Regulation clause updated with significant compliance impact.",
+                        db=db
+                    )
+                    flagged_records.append(rec.id)
+                else:
+                    # New clause text no longer contains an extractable obligation -> route to human review
+                    rec.workflow_state = "PENDING_HUMAN_REVIEW"
+                    db.commit()
+                    state_manager.trigger_reevaluation(
+                        compliance_record_id=rec.id,
+                        reason=(log.change_reason or "") + " No obligation could be re-extracted from the modified clause — human review required.",
+                        db=db
+                    )
+                    flagged_records.append(rec.id)
+
+        elif log.change_type == "REMOVED" and log.old_clause_id:
             obligations = db.query(Obligation).filter(Obligation.source_clause_id == log.old_clause_id).all()
             for ob in obligations:
                 rec = db.query(ComplianceRecord).filter(ComplianceRecord.obligation_id == ob.id).first()
                 if rec:
+                    rec.workflow_state = "PENDING_HUMAN_REVIEW"
+                    db.commit()
                     state_manager.trigger_reevaluation(
                         compliance_record_id=rec.id,
-                        reason=log.change_reason or "Regulation clause updated with significant compliance impact.",
+                        reason=(log.change_reason or "") + " Regulation clause was removed in new version — human review required to close requirement.",
                         db=db
                     )
                     flagged_records.append(rec.id)
@@ -212,7 +249,8 @@ def run_targeted_reassessment(compliance_record_ids: List[int], db: Session) -> 
             res = state_manager.record_assessment(
                 obligation_id=rec.obligation_id,
                 assessment_result=assessment,
-                db=db
+                db=db,
+                trigger_type="regulation_change"
             )
             reassessed_results.append(res)
 

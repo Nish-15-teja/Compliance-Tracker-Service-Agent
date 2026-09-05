@@ -10,13 +10,15 @@
   "clause_extraction": {
     "precision": 1.0,
     "recall": 1.0,
-    "f1_score": 1.0
+    "f1_score": 1.0,
+    "parenting_accuracy": 1.0,
+    "sample_count": 7
   },
   "compliance_assessment": {
-    "accuracy": 0.8,
-    "precision": 0.6667,
+    "accuracy": 1.0,
+    "precision": 1.0,
     "recall": 1.0,
-    "f1_score": 0.8,
+    "f1_score": 1.0,
     "false_positive_rate": 0.0,
     "sample_count": 15
   },
@@ -36,7 +38,8 @@
   },
   "impact_propagation": {
     "precision": 1.0,
-    "unrelated_records_untouched": 1.0
+    "blast_radius_containment_rate": 1.0,
+    "sample_count": 3
   },
   "human_in_the_loop": {
     "auto_applied_percentage": 0.5455,

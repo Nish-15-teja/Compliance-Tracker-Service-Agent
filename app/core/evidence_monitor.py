@@ -24,15 +24,14 @@ def check_evidence_expiry(db: Session, warning_days: int = 30) -> Dict[str, Any]
         if doc_expiry.tzinfo is None:
             doc_expiry = doc_expiry.replace(tzinfo=timezone.utc)
 
-        # Find linked compliance records
+        # Find linked compliance records (Fix 4: never fall back to all records)
         links = db.query(EvidenceLink).filter(EvidenceLink.evidence_document_id == doc.id).all()
         record_ids = [l.compliance_record_id for l in links]
 
-        # If no explicit links, check all compliance records in database for demo test compatibility
         if not record_ids:
-            recs = db.query(ComplianceRecord).all()
-        else:
-            recs = db.query(ComplianceRecord).filter(ComplianceRecord.id.in_(record_ids)).all()
+            continue
+
+        recs = db.query(ComplianceRecord).filter(ComplianceRecord.id.in_(record_ids)).all()
 
         if doc_expiry <= now:
             # EXPIRED

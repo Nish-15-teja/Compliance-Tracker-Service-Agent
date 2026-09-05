@@ -44,10 +44,22 @@ def assess_obligation(obligation_id: int, db: Session) -> Dict[str, Any]:
 
     candidates = retrieve_evidence(obligation_id=obligation_id, db=db, k=5)
 
+    if not candidates:
+        return {
+            "proposed_compliance_status": "EVIDENCE_MISSING",
+            "reasoning": "No relevant evidence chunks found in the repository.",
+            "matched_excerpts": [],
+            "confidence_score": 0.95,
+            "retrieved_candidates_count": 0,
+            "top_evidence_document_id": None,
+            "top_similarity_score": 0.0,
+            "evidence_used": []
+        }
+
     evidence_text_block = "\n".join([
         f"[Doc {c['evidence_document_id']} Page {c['page']} Score {c['similarity_score']}]: {c['matched_text']}"
         for c in candidates
-    ]) if candidates else "No evidence chunks found."
+    ])
 
     prompt = f"""You are an expert regulatory compliance auditor.
 Evaluate whether the provided evidence documents satisfy the given regulatory obligation.
@@ -77,23 +89,42 @@ Output strict JSON:
 
     assessment_res = llm_service.call_llm_json(prompt, fallback_type="compliance_assessment")
 
-    # Strict fallback validation check for zero candidates or very low score candidates
-    if not candidates or candidates[0].get("similarity_score", 0.0) <= 0.05:
-        assessment_res["proposed_compliance_status"] = "EVIDENCE_MISSING"
-        assessment_res["confidence_score"] = 0.95
-        assessment_res["matched_excerpts"] = []
-    else:
-        top_cand = candidates[0]
-        # If candidate has a strong semantic score (e.g. >= 0.20), evaluate as COMPLIANT
-        if top_cand.get("similarity_score", 0.0) >= 0.20:
-            assessment_res["proposed_compliance_status"] = "COMPLIANT"
-            assessment_res["confidence_score"] = 0.95
-            assessment_res["reasoning"] = f"Evidence Document #{top_cand['evidence_document_id']} ({top_cand.get('document_title', 'Evidence')}) explicitly documents and confirms the required compliance procedure on Page {top_cand['page']}."
-            assessment_res["matched_excerpts"] = [top_cand["matched_text"][:200]]
-
-    # Include candidate debugging info in assessment output
+    # Keep debug fields
     assessment_res["retrieved_candidates_count"] = len(candidates)
     assessment_res["top_evidence_document_id"] = candidates[0]["evidence_document_id"] if candidates else None
     assessment_res["top_similarity_score"] = candidates[0]["similarity_score"] if candidates else 0.0
 
+    # Build evidence_used list for Fix 3 from matched excerpts and candidates
+    matched_excerpts = assessment_res.get("matched_excerpts", [])
+    evidence_used = []
+    conf = assessment_res.get("confidence_score", 0.95)
+
+    for excerpt in matched_excerpts:
+        found_cand = None
+        for cand in candidates:
+            if excerpt.strip() and (excerpt.strip() in cand["matched_text"] or cand["matched_text"] in excerpt.strip()):
+                found_cand = cand
+                break
+        if not found_cand and candidates:
+            found_cand = candidates[0]
+
+        if found_cand:
+            evidence_used.append({
+                "evidence_document_id": found_cand["evidence_document_id"],
+                "page": found_cand.get("page", 1),
+                "matched_excerpt": excerpt,
+                "confidence_score": conf
+            })
+
+    # If no matched_excerpts were returned or matched, but status is compliant/partial, include top candidate
+    if not evidence_used and candidates and assessment_res.get("proposed_compliance_status") in ["COMPLIANT", "PARTIALLY_COMPLIANT"]:
+        top_cand = candidates[0]
+        evidence_used.append({
+            "evidence_document_id": top_cand["evidence_document_id"],
+            "page": top_cand.get("page", 1),
+            "matched_excerpt": top_cand["matched_text"][:200],
+            "confidence_score": conf
+        })
+
+    assessment_res["evidence_used"] = evidence_used
     return assessment_res

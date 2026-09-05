@@ -89,6 +89,20 @@ class SimpleVectorStore:
         if not self.chunks:
             return []
 
+        # Filter chunks if db is provided to avoid stale / orphaned chunks across sessions/tests
+        if db is not None:
+            from app.db import EvidenceDocument
+            try:
+                valid_doc_ids = set(r[0] for r in db.query(EvidenceDocument.id).all())
+                active_chunks = [c for c in self.chunks if c["evidence_document_id"] in valid_doc_ids]
+            except Exception:
+                active_chunks = self.chunks
+        else:
+            active_chunks = self.chunks
+
+        if not active_chunks:
+            return []
+
         # Tokenize query into clean words
         query_cleaned = re.sub(r'[^\w\s]', ' ', query.lower())
         query_words = [w for w in query_cleaned.split() if len(w) > 2]
@@ -98,7 +112,7 @@ class SimpleVectorStore:
             return []
 
         results = []
-        for chunk in self.chunks:
+        for chunk in active_chunks:
             text = chunk["matched_text"]
             text_cleaned = re.sub(r'[^\w\s]', ' ', text.lower())
             chunk_words = [w for w in text_cleaned.split() if len(w) > 2]

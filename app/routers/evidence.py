@@ -57,7 +57,12 @@ def upload_evidence(
 
     for rec in active_recs:
         assessment = assess_obligation(obligation_id=rec.obligation_id, db=db)
-        res = state_manager.record_assessment(obligation_id=rec.obligation_id, assessment_result=assessment, db=db)
+        res = state_manager.record_assessment(
+            obligation_id=rec.obligation_id,
+            assessment_result=assessment,
+            db=db,
+            trigger_type="new_evidence"
+        )
 
         if res.get("applied_status") == "COMPLIANT" and not res.get("requires_human_approval"):
             rec.workflow_state = "CLOSED"

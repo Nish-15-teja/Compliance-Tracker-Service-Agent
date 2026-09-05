@@ -321,6 +321,169 @@ def evaluate_human_in_the_loop(fixtures_dir: str) -> Dict[str, Any]:
         "note": f"Computed from {total} review-queue interaction events in scripts/eval_fixtures/hitl_fixture.json"
     }
 
+def evaluate_clause_extraction(fixtures_dir: str = None) -> Dict[str, Any]:
+    """
+    Phase 12: Independent evaluation of clause boundary detection & parenting hierarchy.
+    """
+    from app.agents.extraction_agent import extract_clauses
+    from app.db import RegulationRawPage
+
+    engine = create_engine("sqlite:///:memory:")
+    Base.metadata.create_all(bind=engine)
+    Session = sessionmaker(bind=engine)
+    db = Session()
+
+    reg = Regulation(title="Clause Extraction Benchmark", version_label="v1", source_file_path="bench.pdf")
+    db.add(reg)
+    db.commit()
+
+    sample_text = """Article 5 Principles relating to processing of personal data.
+Personal data shall be processed lawfully, fairly and in a transparent manner.
+
+Article 6 Lawfulness of processing.
+Processing shall be lawful only if and to the extent that at least one of the following applies.
+
+Article 6(1) Specific legal conditions.
+Processing is necessary for compliance with a legal obligation to which the controller is subject.
+
+Article 17 Right to erasure ('right to be forgotten').
+The controller shall have the obligation to erase personal data without undue delay.
+
+Article 17(1) Erasure grounds.
+The personal data are no longer necessary in relation to the purposes for which they were collected.
+
+Section 2.1 Security of processing infrastructure.
+Technical and organisational measures must be maintained.
+
+Clause 3.2 Audit and verification.
+Regular reviews of compliance records must be executed."""
+
+    raw_page = RegulationRawPage(regulation_id=reg.id, page_number=1, raw_text=sample_text)
+    db.add(raw_page)
+    db.commit()
+
+    res = extract_clauses(regulation_id=reg.id, db=db)
+    clauses = db.query(RegulationClause).filter(RegulationClause.regulation_id == reg.id).all()
+
+    expected_identifiers = {"Article 5", "Article 6", "Article 6(1)", "Article 17", "Article 17(1)", "Section 2.1", "Clause 3.2"}
+    detected_identifiers = {c.clause_identifier for c in clauses}
+
+    correct = len(expected_identifiers.intersection(detected_identifiers))
+    total_detected = len(detected_identifiers)
+    total_expected = len(expected_identifiers)
+
+    precision = correct / total_detected if total_detected > 0 else 1.0
+    recall = correct / total_expected if total_expected > 0 else 1.0
+    f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 1.0
+
+    nested_c6 = next((c for c in clauses if c.clause_identifier == "Article 6(1)"), None)
+    parent_c6_correct = nested_c6 and nested_c6.parent_clause_identifier == "Article 6"
+    nested_c17 = next((c for c in clauses if c.clause_identifier == "Article 17(1)"), None)
+    parent_c17_correct = nested_c17 and nested_c17.parent_clause_identifier == "Article 17"
+
+    parenting_acc = ((1.0 if parent_c6_correct else 0.0) + (1.0 if parent_c17_correct else 0.0)) / 2.0
+
+    db.close()
+    engine.dispose()
+
+    return {
+        "precision": round(precision, 4),
+        "recall": round(recall, 4),
+        "f1_score": round(f1, 4),
+        "parenting_accuracy": round(parenting_acc, 4),
+        "sample_count": total_expected
+    }
+
+def evaluate_impact_propagation() -> Dict[str, Any]:
+    """
+    Phase 12: Dynamic evaluation of targeted impact propagation precision and blast radius.
+    """
+    from app.agents.change_impact_agent import detect_changes, propagate_impact
+    from app.agents.extraction_agent import extract_clauses, extract_all_obligations_for_regulation
+    from app.core.state_manager import state_manager
+    from app.db import ComplianceRecord, RegulationRawPage
+
+    engine = create_engine("sqlite:///:memory:")
+    Base.metadata.create_all(bind=engine)
+    Session = sessionmaker(bind=engine)
+    db = Session()
+
+    reg_v1 = Regulation(title="Framework Benchmark", version_label="v1", source_file_path="v1.pdf")
+    db.add(reg_v1)
+    db.commit()
+
+    p1 = RegulationRawPage(
+        regulation_id=reg_v1.id,
+        page_number=1,
+        raw_text="""Article 5 General Principles.
+Personal data must be processed lawfully and fairly.
+
+Article 17 Right to erasure.
+Organizations must delete customer data within 30 days of request.
+
+Article 32 Security of processing.
+Organizations must implement technical access controls and MFA."""
+    )
+    db.add(p1)
+    db.commit()
+
+    extract_clauses(reg_v1.id, db=db)
+    extract_all_obligations_for_regulation(reg_v1.id, db=db)
+
+    v1_obs = db.query(Obligation).join(RegulationClause).filter(RegulationClause.regulation_id == reg_v1.id).all()
+    for ob in v1_obs:
+        state_manager.record_assessment(ob.id, {"proposed_compliance_status": "COMPLIANT", "confidence_score": 0.95, "reasoning": "Satisfied"}, db=db)
+
+    reg_v2 = Regulation(title="Framework Benchmark", version_label="v2", source_file_path="v2.pdf")
+    db.add(reg_v2)
+    db.commit()
+
+    p2 = RegulationRawPage(
+        regulation_id=reg_v2.id,
+        page_number=1,
+        raw_text="""Article 5 General Principles.
+Personal data must be processed lawfully and fairly.
+
+Article 17 Right to erasure.
+Organizations must delete customer data within 3 days of request.
+
+Article 32 Security of processing.
+Organizations must implement technical access controls and MFA."""
+    )
+    db.add(p2)
+    db.commit()
+
+    extract_clauses(reg_v2.id, db=db)
+
+    target_clause = db.query(RegulationClause).filter(RegulationClause.regulation_id == reg_v1.id, RegulationClause.clause_identifier == "Article 17").first()
+    target_ob = db.query(Obligation).filter(Obligation.source_clause_id == target_clause.id).first()
+    target_rec = db.query(ComplianceRecord).filter(ComplianceRecord.obligation_id == target_ob.id).first()
+    target_rec_id = target_rec.id
+
+    unrelated_recs = db.query(ComplianceRecord).filter(ComplianceRecord.id != target_rec_id).all()
+    unrelated_rec_ids = [r.id for r in unrelated_recs]
+
+    detect_changes(old_regulation_id=reg_v1.id, new_regulation_id=reg_v2.id, db=db)
+    prop_res = propagate_impact(new_regulation_id=reg_v2.id, db=db)
+    flagged = prop_res["flagged_compliance_records"]
+
+    tp = 1 if target_rec_id in flagged else 0
+    fp = len([fid for fid in flagged if fid != target_rec_id])
+    precision = tp / (tp + fp) if (tp + fp) > 0 else 1.0
+
+    unrelated_after = db.query(ComplianceRecord).filter(ComplianceRecord.id.in_(unrelated_rec_ids)).all()
+    untouched = sum(1 for r in unrelated_after if r.workflow_state != "RE_EVALUATION_REQUIRED")
+    unrelated_ratio = untouched / len(unrelated_after) if unrelated_after else 1.0
+
+    db.close()
+    engine.dispose()
+
+    return {
+        "precision": round(precision, 4),
+        "blast_radius_containment_rate": round(unrelated_ratio, 4),
+        "sample_count": len(unrelated_recs) + 1
+    }
+
 def run_evaluation_benchmark(fixtures_dir: str = None) -> Dict[str, Any]:
     """
     Phase 12 Part B: Real Computed Evaluation Benchmark Suite.
@@ -335,12 +498,8 @@ def run_evaluation_benchmark(fixtures_dir: str = None) -> Dict[str, Any]:
     # 1. Obligation extraction evaluation
     metrics["obligation_extraction"] = evaluate_obligation_extraction(fixtures_dir)
 
-    # 2. Clause extraction metrics (computed from obligation extraction precision)
-    metrics["clause_extraction"] = {
-        "precision": metrics["obligation_extraction"]["precision"],
-        "recall": metrics["obligation_extraction"]["recall"],
-        "f1_score": metrics["obligation_extraction"]["f1_score"]
-    }
+    # 2. Independent Clause extraction evaluation (Fix 10)
+    metrics["clause_extraction"] = evaluate_clause_extraction(fixtures_dir)
 
     # 3. Compliance assessment evaluation
     metrics["compliance_assessment"] = evaluate_compliance_assessment(fixtures_dir)
@@ -350,11 +509,8 @@ def run_evaluation_benchmark(fixtures_dir: str = None) -> Dict[str, Any]:
     metrics["change_detection_4step_pipeline"] = change_metrics["change_detection_4step_pipeline"]
     metrics["change_detection_cosine_similarity_baseline"] = change_metrics["change_detection_cosine_similarity_baseline"]
 
-    # 5. Targeted impact propagation precision
-    metrics["impact_propagation"] = {
-        "precision": 1.00,
-        "unrelated_records_untouched": 1.00
-    }
+    # 5. Targeted impact propagation precision (Fix 10: dynamically measured)
+    metrics["impact_propagation"] = evaluate_impact_propagation()
 
     # 6. Human-in-the-loop metrics
     metrics["human_in_the_loop"] = evaluate_human_in_the_loop(fixtures_dir)
