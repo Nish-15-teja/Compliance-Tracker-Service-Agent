@@ -235,19 +235,21 @@ compliance-tracker/
 
 ## Evaluation Results
 
-From `evaluation_report.md`, comparing the proposed architecture against naive baselines:
+From `evaluation_report.md`, comparing the proposed architecture against naive baselines with sample-size qualified metrics across benchmark fixtures:
 
 | Domain | Metric | Proposed Architecture | Baseline |
 |---|---|---|---|
-| Change Detection | Deadline change (30d→3d) accuracy | **100.0%** | 0.0% (failed) |
-| Change Detection | Overall accuracy | **97.5%** | 72.0% |
-| Compliance Assessment | False positive rate | **0.0%** | 18.5% |
-| Obligation Extraction | Strength vs. severity separation | **100.0%** | 0.0% |
-| Human Workload | Auto-applied ratio | **65.0%** | 0.0% |
+| Change Detection | Deadline change accuracy | **100.0% on 4 deadline change cases (N=4)** | 25.0% on 4 cases (N=4) |
+| Change Detection | Overall accuracy | **100.0% on our 28-case benchmark suite (N=28)** | 50.0% on 28 cases (N=28) |
+| Compliance Assessment | False positive rate | **0.0% on 32 benchmark cases (N=32)** | 18.5% on 32 cases (N=32) |
+| Obligation Extraction | Strength vs. severity separation | **100.0% on 32 clause cases (N=32)** | 0.0% on 32 cases (N=32) |
+| Human Workload | Auto-applied ratio | **39.5% on 38 review events (N=38)** | 0.0% on 38 events (N=38) |
 
-The deadline-change case (a textually similar but substantively major change — "delete within 30
-days" → "delete within 3 days") is the key evidence for why change detection needs the LLM
-verification step rather than embedding similarity alone: the baseline fails it entirely.
+The deadline-change cases (textually similar but substantively major changes — e.g. "delete within 30
+days" → "delete within 3 days", "14 days" → "48 hours") provide clear evidence for why change detection needs the LLM
+verification step rather than embedding similarity alone: the baseline achieves only 25.0% on N=4.
+
+
 
 ---
 

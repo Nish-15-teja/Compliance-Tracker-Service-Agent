@@ -179,24 +179,25 @@ class StateManager:
             "status": "rejected"
         }
 
-    def trigger_reevaluation(self, compliance_record_id: int, reason: str, db: Session) -> Dict[str, Any]:
+    def trigger_reevaluation(self, compliance_record_id: int, reason: str, db: Session, target_workflow_state: str = "RE_EVALUATION_REQUIRED", trigger_type: str = "regulation_change") -> Dict[str, Any]:
         record = db.query(ComplianceRecord).filter(ComplianceRecord.id == compliance_record_id).first()
         if not record:
             raise ValueError(f"Compliance record with ID {compliance_record_id} not found.")
 
         old_wf = record.workflow_state
-        record.workflow_state = "RE_EVALUATION_REQUIRED"
+        record.workflow_state = target_workflow_state
         db.commit()
 
+        is_human = (target_workflow_state == "PENDING_HUMAN_REVIEW")
         transition = StateTransition(
             compliance_record_id=record.id,
             field_changed="workflow_state",
             old_value=old_wf,
-            new_value="RE_EVALUATION_REQUIRED",
-            trigger_type="regulation_change",
+            new_value=target_workflow_state,
+            trigger_type=trigger_type,
             trigger_description=reason,
-            required_human_approval=False,
-            approval_status="auto_applied"
+            required_human_approval=is_human,
+            approval_status="pending" if is_human else "auto_applied"
         )
         db.add(transition)
         db.commit()
@@ -205,7 +206,7 @@ class StateManager:
         return {
             "compliance_record_id": record.id,
             "old_workflow_state": old_wf,
-            "new_workflow_state": "RE_EVALUATION_REQUIRED",
+            "new_workflow_state": target_workflow_state,
             "compliance_status_preserved": record.compliance_status
         }
 

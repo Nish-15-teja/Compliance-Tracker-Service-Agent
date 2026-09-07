@@ -1,0 +1,17 @@
+[
+  {"id": 1, "action": "auto_applied", "risk_severity": "low", "confidence_score": 0.96},
+  {"id": 3, "action": "auto_applied", "risk_severity": "medium", "confidence_score": 0.92},
+  {"id": 4, "action": "auto_applied", "risk_severity": "low", "confidence_score": 0.95},
+  {"id": 8, "action": "auto_applied", "risk_severity": "medium", "confidence_score": 0.90},
+  {"id": 9, "action": "auto_applied", "risk_severity": "low", "confidence_score": 0.97},
+  {"id": 13, "action": "approved", "risk_severity": "high", "confidence_score": 0.82, "reviewer_role": "Compliance Officer"},
+  {"id": 14, "action": "approved", "risk_severity": "critical", "confidence_score": 0.78, "reviewer_role": "Chief Privacy Officer"},
+  {"id": 20, "action": "edited", "risk_severity": "high", "confidence_score": 0.70, "reviewer_role": "Legal Counsel", "edit_note": "Adjusted obligation due date."},
+  {"id": 22, "action": "rejected", "risk_severity": "high", "confidence_score": 0.60, "reviewer_role": "Compliance Lead", "reject_reason": "Insufficient evidence citation."},
+  {"id": 23, "action": "approved", "risk_severity": "medium", "confidence_score": 0.89, "reviewer_role": "Compliance Officer"},
+  {"id": 24, "action": "approved", "risk_severity": "high", "confidence_score": 0.94, "reviewer_role": "Chief Information Security Officer"},
+  {"id": 26, "action": "edited", "risk_severity": "medium", "confidence_score": 0.88, "reviewer_role": "Data Governance Lead", "edit_note": "Adjusted responsible role from HR to Legal."},
+  {"id": 28, "action": "edited", "risk_severity": "high", "confidence_score": 0.76, "reviewer_role": "Security Architect", "edit_note": "Upgraded cryptographic cipher requirements."},
+  {"id": 30, "action": "rejected", "risk_severity": "medium", "confidence_score": 0.75, "reviewer_role": "Internal Auditor", "reject_reason": "Evidence document date is expired by 14 months."},
+  {"id": 34, "action": "auto_applied", "risk_severity": "low", "confidence_score": 0.98}
+]

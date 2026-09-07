@@ -1,0 +1,86 @@
+[
+  {
+    "clause_identifier": "Article 1",
+    "clause_text": "This Regulation applies to the processing of personal data in the context of the activities of an establishment of a controller or a processor in the Union.",
+    "expected_is_obligation": false,
+    "expected_strength": null
+  },
+  {
+    "clause_identifier": "Article 4(1)",
+    "clause_text": "For the purposes of this Regulation, 'personal data' means any information relating to an identified or identifiable natural person ('data subject').",
+    "expected_is_obligation": false,
+    "expected_strength": null
+  },
+  {
+    "clause_identifier": "Recital 12",
+    "clause_text": "General definitions and background context regarding cross-border data transfers are purely informative.",
+    "expected_is_obligation": false,
+    "expected_strength": null
+  },
+  {
+    "clause_identifier": "Clause 2.4",
+    "clause_text": "Nothing herein shall be construed as obligating the processor to indemnify third-party sub-processors.",
+    "expected_is_obligation": false,
+    "expected_strength": null
+  },
+  {
+    "clause_identifier": "Article 17(1)",
+    "clause_text": "The controller shall have the obligation to erase personal data without undue delay where the personal data are no longer necessary.",
+    "expected_is_obligation": true,
+    "expected_strength": "mandatory"
+  },
+  {
+    "clause_identifier": "Article 32(1)",
+    "clause_text": "The controller and the processor must implement appropriate technical and organisational measures to ensure a level of security appropriate to the risk.",
+    "expected_is_obligation": true,
+    "expected_strength": "mandatory"
+  },
+  {
+    "clause_identifier": "Article 30(1)",
+    "clause_text": "Each controller must maintain a written record of processing activities under its responsibility.",
+    "expected_is_obligation": true,
+    "expected_strength": "mandatory"
+  },
+  {
+    "clause_identifier": "Clause 14(A)",
+    "clause_text": "It behoves the controller to maintain and furnish an unabridged ledger of third-party disclosures forthwith upon demand by the authority.",
+    "expected_is_obligation": true,
+    "expected_strength": "mandatory"
+  },
+  {
+    "clause_identifier": "Article 35(1)",
+    "clause_text": "Where a type of processing is likely to result in a high risk, the controller shall, where relevant, carry out an assessment of the impact.",
+    "expected_is_obligation": true,
+    "expected_strength": "conditional"
+  },
+  {
+    "clause_identifier": "Article 34(1)",
+    "clause_text": "When the personal data breach is likely to result in a high risk, the controller shall communicate the breach to the data subject where appropriate.",
+    "expected_is_obligation": true,
+    "expected_strength": "conditional"
+  },
+  {
+    "clause_identifier": "Article 28(2)",
+    "clause_text": "The processor shall not engage another processor without prior specific or general written authorisation of the controller, though the controller may grant broad general consent where appropriate.",
+    "expected_is_obligation": true,
+    "expected_strength": "conditional"
+  },
+  {
+    "clause_identifier": "Article 40(1)",
+    "clause_text": "The Member States and supervisory authorities may encourage the drawing up of codes of conduct intended to contribute to the proper application of this Regulation.",
+    "expected_is_obligation": true,
+    "expected_strength": "advisory"
+  },
+  {
+    "clause_identifier": "Article 42(1)",
+    "clause_text": "The Member States and Commission should consider establishing data protection certification mechanisms and seals.",
+    "expected_is_obligation": true,
+    "expected_strength": "advisory"
+  },
+  {
+    "clause_identifier": "Article 43(1)",
+    "clause_text": "Independent certification bodies are encouraged to provide periodic audit reviews upon request.",
+    "expected_is_obligation": true,
+    "expected_strength": "advisory"
+  }
+]

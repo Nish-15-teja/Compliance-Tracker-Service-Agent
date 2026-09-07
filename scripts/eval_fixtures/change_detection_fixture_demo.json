@@ -1,0 +1,142 @@
+[
+  {
+    "id": 1,
+    "clause_identifier": "Article 17",
+    "old_text": "Organizations must delete customer data within 30 days of receiving a verified deletion request.",
+    "new_text": "Organizations must delete customer data within 3 days of receiving a verified deletion request.",
+    "expected_change_type": "MODIFIED",
+    "expected_change_significance": "significant_change",
+    "is_deadline_case": true,
+    "description": "Critical deadline tightening from 30 days to 3 days"
+  },
+  {
+    "id": 5,
+    "clause_identifier": "Article 3",
+    "old_text": "This policy applies to full-time employees located in the primary office.",
+    "new_text": "This policy applies to all full-time, part-time, and contractor personnel across all substantive regional entities.",
+    "expected_change_type": "MODIFIED",
+    "expected_change_significance": "significant_change",
+    "is_deadline_case": false,
+    "description": "Substantive scope expansion to new personnel and entities"
+  },
+  {
+    "id": 6,
+    "clause_identifier": "Article 37",
+    "old_text": "Data protection officers must report directly to executive management.",
+    "new_text": "Data protection officers must report directly to executive management.",
+    "expected_change_type": "UNCHANGED",
+    "expected_change_significance": "minor_wording",
+    "is_deadline_case": false,
+    "description": "Exact text match across regulation versions"
+  },
+  {
+    "id": 8,
+    "clause_identifier": "Article 83",
+    "old_text": "Violations may incur fines up to 10,000 EUR per non-compliant instance.",
+    "new_text": "Violations may incur substantive fines up to 500,000 EUR per non-compliant instance.",
+    "expected_change_type": "MODIFIED",
+    "expected_change_significance": "significant_change",
+    "is_deadline_case": false,
+    "description": "Substantive penalty threshold increase"
+  },
+  {
+    "id": 9,
+    "clause_identifier": "Article 6(2)",
+    "old_text": "Prior to processing personal data, the controller must identify a valid legal basis under Article 6.",
+    "new_text": "Before processing personal data, the controller must identify a valid legal basis under Article 6.",
+    "expected_change_type": "MODIFIED",
+    "expected_change_significance": "minor_wording",
+    "is_deadline_case": false,
+    "description": "Subtle wording synonym change (Prior to -> Before) without changing legal meaning"
+  },
+  {
+    "id": 11,
+    "clause_identifier": "Article 28(1)",
+    "old_text": "The processor must implement appropriate technical and organisational safeguards to secure personal data.",
+    "new_text": "The data processor shall maintain suitable technical and organisational safeguards to secure personal data.",
+    "expected_change_type": "MODIFIED",
+    "expected_change_significance": "minor_wording",
+    "is_deadline_case": false,
+    "description": "Synonym swap (must implement -> shall maintain; appropriate -> suitable)"
+  },
+  {
+    "id": 13,
+    "clause_identifier": "Article 34(2)",
+    "old_text": "The controller should inform data subjects without delay and within 14 days of confirming an unencrypted breach.",
+    "new_text": "The controller must notify affected data subjects immediately and in all circumstances within 48 hours of confirming an unencrypted breach.",
+    "expected_change_type": "MODIFIED",
+    "expected_change_significance": "significant_change",
+    "is_deadline_case": true,
+    "description": "Multiple simultaneous changes: modal shift (should -> must) and deadline reduction (14 days -> 48 hours)"
+  },
+  {
+    "id": 14,
+    "clause_identifier": "Article 24(1)",
+    "old_text": "Taking into account the nature, scope, context and purposes of processing, the controller shall implement appropriate data protection policies.",
+    "new_text": "Having regard to the nature, scope, context and objectives of data processing, the data controller shall establish suitable data protection policies.",
+    "expected_change_type": "MODIFIED",
+    "expected_change_significance": "minor_wording",
+    "is_deadline_case": false,
+    "description": "Multiple simultaneous stylistic edits across introductory clauses without altering obligations"
+  },
+  {
+    "id": 15,
+    "clause_identifier": "Article 15(3)",
+    "old_text": "The controller shall provide a copy of the personal data undergoing processing within 1 month of receipt of the request.",
+    "new_text": "The controller shall provide a copy of the personal data undergoing processing within 30 calendar days of receipt of the request.",
+    "expected_change_type": "MODIFIED",
+    "expected_change_significance": "minor_wording",
+    "is_deadline_case": false,
+    "description": "Ambiguous timeframe equivalent format (1 month vs 30 calendar days)"
+  },
+  {
+    "id": 17,
+    "clause_identifier": "Article 33(3)",
+    "old_text": "Security incident preliminary reports must be submitted to the supervisory desk within 48 hours.",
+    "new_text": "Security incident preliminary reports must be submitted to the supervisory desk within 2 days.",
+    "expected_change_type": "MODIFIED",
+    "expected_change_significance": "minor_wording",
+    "is_deadline_case": false,
+    "description": "Time unit conversion (48 hours to 2 days) without changing the deadline window"
+  },
+  {
+    "id": 20,
+    "clause_identifier": "Section 4.1",
+    "old_text": "All covered business entities operating customer-facing digital web applications and mobile software services shall maintain comprehensive cryptographic audit logging for all database transactions and administrative access events across all production runtime clusters.",
+    "new_text": "All covered business entities operating customer-facing digital web applications and mobile software services shall maintain comprehensive cryptographic audit logging for all database transactions and administrative access events across all production runtime clusters, except for micro-enterprises processing fewer than 5,000 records annually.",
+    "expected_change_type": "MODIFIED",
+    "expected_change_significance": "significant_change",
+    "is_deadline_case": false,
+    "description": "Exemption buried at the end of a dense paragraph creating a significant scope carveout"
+  },
+  {
+    "id": 22,
+    "clause_identifier": "Section 8.2",
+    "old_text": "Data transfer mechanisms involving third-party cloud hosting providers located outside the European Economic Area must incorporate standard contractual clauses approved by the European Commission, along with supplementary technical safeguards including end-to-end encryption.",
+    "new_text": "Data transfer mechanisms involving third-party cloud hosting vendors located outside the European Economic Area must incorporate standard contractual clauses approved by the European Commission, along with supplementary technical safeguards including robust end-to-end encryption.",
+    "expected_change_type": "MODIFIED",
+    "expected_change_significance": "minor_wording",
+    "is_deadline_case": false,
+    "description": "Minor adjective and noun variation (providers -> vendors; added 'robust') in a long paragraph"
+  },
+  {
+    "id": 25,
+    "clause_identifier": "Article 30(5)",
+    "old_text": "The obligations referred to in paragraphs 1 and 2 shall not apply to an enterprise employing fewer than 250 persons.",
+    "new_text": "The obligations referred to in paragraphs 1 and 2 shall not apply to an enterprise employing fewer than 50 persons.",
+    "expected_change_type": "MODIFIED",
+    "expected_change_significance": "significant_change",
+    "is_deadline_case": false,
+    "description": "Employee threshold lowered from 250 to 50 persons significantly expanding compliance reach"
+  },
+  {
+    "id": 27,
+    "clause_identifier": "Rule 14.1",
+    "old_text": "Financial institutions must report any cybersecurity loss event exceeding a threshold of $50,000 to the central banking authority.",
+    "new_text": "Financial institutions must report any cybersecurity loss event exceeding a threshold of $50,000 USD to the central banking authority.",
+    "expected_change_type": "MODIFIED",
+    "expected_change_significance": "minor_wording",
+    "is_deadline_case": false,
+    "description": "Clarifying currency suffix ($50,000 to $50,000 USD) without altering numerical threshold"
+  }
+]

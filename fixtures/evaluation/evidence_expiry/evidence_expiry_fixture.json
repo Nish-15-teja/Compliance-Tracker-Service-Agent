@@ -1,0 +1,123 @@
+[
+  {
+    "case_id": "EE-001",
+    "category": "valid_far_from_expiry",
+    "document_title": "ISO 27001 Certification 2025-2028",
+    "expiry_offset_days": 180,
+    "linked_obligations_count": 1,
+    "expected_evidence_state": "VALID",
+    "expected_workflow_state": "ACTIVE",
+    "expected_flagged_expired": false,
+    "policy_rule_being_tested": "evidence_monitor.py lines 61-68: Expiry (+180 days) is beyond warning_threshold (now + 30 days); document and linked record remain untouched in VALID state.",
+    "notes": "Evidence with long remaining validity remains active with zero state mutations."
+  },
+  {
+    "case_id": "EE-002",
+    "category": "expiring_today_boundary",
+    "document_title": "Annual Penetration Testing Attestation",
+    "expiry_offset_days": 0,
+    "linked_obligations_count": 1,
+    "expected_evidence_state": "EXPIRED",
+    "expected_workflow_state": "RE_EVALUATION_REQUIRED",
+    "expected_flagged_expired": true,
+    "policy_rule_being_tested": "evidence_monitor.py line 36: 'if doc_expiry <= now:' evaluates to True when timestamp has elapsed today, triggering transition to EXPIRED.",
+    "notes": "Boundary test where expiry timestamp is reached today; must immediately flag for re-evaluation."
+  },
+  {
+    "case_id": "EE-003",
+    "category": "expired_yesterday_boundary",
+    "document_title": "Third-Party Vendor SOC 2 Report",
+    "expiry_offset_days": -1,
+    "linked_obligations_count": 1,
+    "expected_evidence_state": "EXPIRED",
+    "expected_workflow_state": "RE_EVALUATION_REQUIRED",
+    "expected_flagged_expired": true,
+    "policy_rule_being_tested": "evidence_monitor.py lines 36-45: 'doc_expiry <= now' sets evidence_state = 'EXPIRED' and workflow_state = 'RE_EVALUATION_REQUIRED' while preserving compliance_status.",
+    "notes": "Standard past-due evidence successfully triggers state transition and audit logging."
+  },
+  {
+    "case_id": "EE-004",
+    "category": "no_expiry_date_set",
+    "document_title": "Corporate Cryptographic Architecture Standard",
+    "expiry_offset_days": null,
+    "linked_obligations_count": 1,
+    "expected_evidence_state": "VALID",
+    "expected_workflow_state": "ACTIVE",
+    "expected_flagged_expired": false,
+    "policy_rule_being_tested": "evidence_monitor.py line 20: 'filter(EvidenceDocument.expiry_date != None)' excludes documents without expiry from processing.",
+    "notes": "Standing policies without fixed expiration dates are permanently valid until manually updated."
+  },
+  {
+    "case_id": "EE-005",
+    "category": "expiring_soon_warning_window",
+    "document_title": "External Vulnerability Scan Q3",
+    "expiry_offset_days": 15,
+    "linked_obligations_count": 1,
+    "expected_evidence_state": "EXPIRING_SOON",
+    "expected_workflow_state": "ACTIVE",
+    "expected_flagged_expired": false,
+    "policy_rule_being_tested": "evidence_monitor.py lines 61-68: 'elif doc_expiry <= warning_threshold:' (default warning_days=30) sets evidence_state = 'EXPIRING_SOON' without triggering re-evaluation.",
+    "notes": "Proactive warning window flags document for renewal while keeping compliance active."
+  },
+  {
+    "case_id": "EE-006",
+    "category": "expired_single_linked_obligation",
+    "document_title": "DPO Annual Registration Certificate",
+    "expiry_offset_days": -30,
+    "linked_obligations_count": 1,
+    "expected_evidence_state": "EXPIRED",
+    "expected_workflow_state": "RE_EVALUATION_REQUIRED",
+    "expected_flagged_expired": true,
+    "policy_rule_being_tested": "evidence_monitor.py lines 28-35: Identifies exactly the single linked ComplianceRecord and updates its workflow state.",
+    "notes": "Ensures isolated 1-to-1 evidence link transitions accurately."
+  },
+  {
+    "case_id": "EE-007",
+    "category": "expired_multi_linked_obligations",
+    "document_title": "Enterprise Cloudflare ZTNA Network Specification",
+    "expiry_offset_days": -5,
+    "linked_obligations_count": 3,
+    "expected_evidence_state": "EXPIRED",
+    "expected_workflow_state": "RE_EVALUATION_REQUIRED",
+    "expected_flagged_expired": true,
+    "policy_rule_being_tested": "evidence_monitor.py lines 28-34: 'recs = db.query(ComplianceRecord).filter(ComplianceRecord.id.in_(record_ids)).all()' loops through and flags ALL 3 linked records.",
+    "notes": "Shared evidence document expiration correctly cascades to all 3 dependent obligations without dropping any."
+  },
+  {
+    "case_id": "EE-008",
+    "category": "expired_with_valid_secondary_backup",
+    "document_title": "Legacy Key Rotation Policy (Expired, with Secondary Valid KMS Doc Link)",
+    "expiry_offset_days": -10,
+    "linked_obligations_count": 1,
+    "has_valid_secondary_link": true,
+    "expected_evidence_state": "EXPIRED",
+    "expected_workflow_state": "RE_EVALUATION_REQUIRED",
+    "expected_flagged_expired": true,
+    "policy_rule_being_tested": "evidence_monitor.py lines 28-45: Per-document loop iterates over expired documents and marks linked record.evidence_state = 'EXPIRED' regardless of other valid EvidenceLink rows.",
+    "notes": "Real system behavior: The monitor operates per-document, so an obligation linked to 1 expired doc + 1 valid backup doc is still flagged for re-assessment. This is an intentional safety design allowing Agent 2 to verify whether the remaining backup document alone is sufficient."
+  },
+  {
+    "case_id": "EE-009",
+    "category": "timezone_utc_boundary",
+    "document_title": "AWS KMS Cryptographic HSM Attestation",
+    "expiry_offset_days": -0.01,
+    "linked_obligations_count": 1,
+    "expected_evidence_state": "EXPIRED",
+    "expected_workflow_state": "RE_EVALUATION_REQUIRED",
+    "expected_flagged_expired": true,
+    "policy_rule_being_tested": "evidence_monitor.py lines 24-25: 'if doc_expiry.tzinfo is None: doc_expiry = doc_expiry.replace(tzinfo=timezone.utc)' guarantees deterministic comparison against datetime.now(timezone.utc).",
+    "notes": "Verifies precise UTC timestamp boundary calculation without timezone offset drift."
+  },
+  {
+    "case_id": "EE-010",
+    "category": "unrelated_valid_evidence_isolation",
+    "document_title": "Employee Background Check Verification",
+    "expiry_offset_days": 90,
+    "linked_obligations_count": 1,
+    "expected_evidence_state": "VALID",
+    "expected_workflow_state": "ACTIVE",
+    "expected_flagged_expired": false,
+    "policy_rule_being_tested": "evidence_monitor.py lines 28-30: Targeted link lookup ensures unrelated records are completely unaffected by other expiring batches.",
+    "notes": "Blast radius containment: valid documents in the same database remain completely untouched."
+  }
+]

@@ -173,22 +173,25 @@ def propagate_impact(new_regulation_id: int, db: Session) -> Dict[str, Any]:
     for log in change_logs:
         if log.change_type == "MODIFIED" and log.old_clause_id and log.new_clause_id:
             old_obligations = db.query(Obligation).filter(Obligation.source_clause_id == log.old_clause_id).all()
-            for old_ob in old_obligations:
+            new_obs = extract_obligations(clause_id=log.new_clause_id, db=db)
+
+            for idx, old_ob in enumerate(old_obligations):
                 rec = db.query(ComplianceRecord).filter(ComplianceRecord.obligation_id == old_ob.id).first()
                 if not rec:
                     continue
 
-                # Re-extract obligation(s) from the NEW clause text (Fix 5)
-                new_obs = extract_obligations(clause_id=log.new_clause_id, db=db)
-
                 if new_obs:
-                    new_ob = new_obs[0]
-                    # Repoint the EXISTING compliance record to the new obligation (preserves state_transitions history)
-                    rec.obligation_id = new_ob.id
-                    db.commit()
+                    target_new_ob = new_obs[idx] if idx < len(new_obs) else None
+                    if target_new_ob and target_new_ob.id != rec.obligation_id:
+                        # Only repoint if no other compliance record is currently bound to target_new_ob
+                        existing_owner = db.query(ComplianceRecord).filter(ComplianceRecord.obligation_id == target_new_ob.id).first()
+                        if not existing_owner or existing_owner.id == rec.id:
+                            rec.obligation_id = target_new_ob.id
+                            db.commit()
 
-                    for extra_ob in new_obs[1:]:
-                        added_obligations.append(extra_ob.id)
+                    if idx == 0 and len(new_obs) > len(old_obligations):
+                        for extra_ob in new_obs[len(old_obligations):]:
+                            added_obligations.append(extra_ob.id)
 
                     state_manager.trigger_reevaluation(
                         compliance_record_id=rec.id,
@@ -212,11 +215,10 @@ def propagate_impact(new_regulation_id: int, db: Session) -> Dict[str, Any]:
             for ob in obligations:
                 rec = db.query(ComplianceRecord).filter(ComplianceRecord.obligation_id == ob.id).first()
                 if rec:
-                    rec.workflow_state = "PENDING_HUMAN_REVIEW"
-                    db.commit()
                     state_manager.trigger_reevaluation(
                         compliance_record_id=rec.id,
                         reason=(log.change_reason or "") + " Regulation clause was removed in new version — human review required to close requirement.",
+                        target_workflow_state="PENDING_HUMAN_REVIEW",
                         db=db
                     )
                     flagged_records.append(rec.id)

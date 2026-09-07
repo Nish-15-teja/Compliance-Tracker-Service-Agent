@@ -1,6 +1,7 @@
-Metric Domain,Evaluation Metric,Proposed Architecture (4-Step),Baseline (Cosine Similarity)
-Change Detection,Deadline Change Accuracy,100.0%,0.0%
-Change Detection,Overall Accuracy,100.0%,62.5%
-Compliance Assessment,False Positive Rate (False Compliant),0.0%,18.5%
-Obligation Extraction,Strength/Severity Independence,100.0%,0.0%
-Human Workload,Auto-Applied Compliant Ratio,54.5%,0.0%
+Domain,Metric,Proposed Architecture,Baseline,Benchmark Sample Size
+Obligation Extraction,Overall Extraction & Strength Accuracy,77.5%,0.0%,N=40 clauses
+Change Detection,Overall Significance Accuracy,93.3%,76.7%,N=30 cases
+Compliance Assessment,False Positive Rejection Rate,100.0%,81.5%,N=30 scenarios
+Human-in-the-Loop,Policy Gate Routing Accuracy,100.0%,0.0%,N=15 events
+Evidence Freshness & Expiry,Expiry Detection Accuracy,100.0%,0.0%,N=10 documents
+Impact Propagation,Targeted Blast Radius Precision,100.0%,0.0%,N=10 clauses

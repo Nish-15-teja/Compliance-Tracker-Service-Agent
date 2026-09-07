@@ -1,53 +1,373 @@
 {
   "obligation_extraction": {
-    "precision": 1.0,
+    "overall_accuracy": 0.775,
+    "precision": 0.7568,
     "recall": 1.0,
-    "f1_score": 1.0,
-    "strength_accuracy": 0.8462,
-    "strength_severity_independence_rate": 1.0,
-    "sample_count": 18
+    "f1_score": 0.8615,
+    "strength_accuracy": 0.8214,
+    "sample_count": 40,
+    "dataset_composition": {
+      "pure_definition": 5,
+      "informative_context": 5,
+      "statutory_exception": 2,
+      "mandatory_requirement": 5,
+      "conditional_obligation": 4,
+      "prohibited_action": 3,
+      "reporting_deadline": 3,
+      "retention_disposal": 2,
+      "access_control": 3,
+      "documentation_audit": 2,
+      "advisory_guideline": 3,
+      "multiple_obligations": 3
+    },
+    "near_duplicate_warnings": [],
+    "errors": [
+      {
+        "case_id": "OE-003",
+        "task": "obligation_detection",
+        "expected": "No Obligation (False)",
+        "predicted": "Obligation Extracted (True)",
+        "error_category": "false_positive_obligation",
+        "clause_text": "'Controller' means the natural or legal person, public authority, agency or other body which determi..."
+      },
+      {
+        "case_id": "OE-005",
+        "task": "obligation_detection",
+        "expected": "No Obligation (False)",
+        "predicted": "Obligation Extracted (True)",
+        "error_category": "false_positive_obligation",
+        "clause_text": "'Biometric data' means personal data resulting from specific technical processing relating to the ph..."
+      },
+      {
+        "case_id": "OE-006",
+        "task": "obligation_detection",
+        "expected": "No Obligation (False)",
+        "predicted": "Obligation Extracted (True)",
+        "error_category": "false_positive_obligation",
+        "clause_text": "Cross-border flows of personal data are necessary for the expansion of international trade and inter..."
+      },
+      {
+        "case_id": "OE-007",
+        "task": "obligation_detection",
+        "expected": "No Obligation (False)",
+        "predicted": "Obligation Extracted (True)",
+        "error_category": "false_positive_obligation",
+        "clause_text": "The processing of personal data should be designed to serve mankind; the right to the protection of ..."
+      },
+      {
+        "case_id": "OE-008",
+        "task": "obligation_detection",
+        "expected": "No Obligation (False)",
+        "predicted": "Obligation Extracted (True)",
+        "error_category": "false_positive_obligation",
+        "clause_text": "This document outlines the general architectural vision and operational context for regulatory overs..."
+      },
+      {
+        "case_id": "OE-009",
+        "task": "obligation_detection",
+        "expected": "No Obligation (False)",
+        "predicted": "Obligation Extracted (True)",
+        "error_category": "false_positive_obligation",
+        "clause_text": "Organizations frequently observe operational efficiencies when establishing centralized compliance c..."
+      },
+      {
+        "case_id": "OE-010",
+        "task": "obligation_detection",
+        "expected": "No Obligation (False)",
+        "predicted": "Obligation Extracted (True)",
+        "error_category": "false_positive_obligation",
+        "clause_text": "The formatting conventions and typographical standards applied throughout this document follow stand..."
+      },
+      {
+        "case_id": "OE-011",
+        "task": "obligation_detection",
+        "expected": "No Obligation (False)",
+        "predicted": "Obligation Extracted (True)",
+        "error_category": "false_positive_obligation",
+        "clause_text": "This Regulation does not apply to the processing of personal data by a natural person in the course ..."
+      },
+      {
+        "case_id": "OE-012",
+        "task": "obligation_detection",
+        "expected": "No Obligation (False)",
+        "predicted": "Obligation Extracted (True)",
+        "error_category": "false_positive_obligation",
+        "clause_text": "Activities concerning national security, state defence, and foreign policy fall completely outside t..."
+      },
+      {
+        "case_id": "OE-018",
+        "task": "obligation_strength_classification",
+        "expected": "conditional",
+        "predicted": "mandatory",
+        "error_category": "strength_mismatch",
+        "clause_text": "Where a type of processing in particular using new technologies is likely to result in a high risk t..."
+      },
+      {
+        "case_id": "OE-019",
+        "task": "obligation_strength_classification",
+        "expected": "conditional",
+        "predicted": "mandatory",
+        "error_category": "strength_mismatch",
+        "clause_text": "The controller shall consult the supervisory authority prior to processing where a data protection i..."
+      },
+      {
+        "case_id": "OE-020",
+        "task": "obligation_strength_classification",
+        "expected": "conditional",
+        "predicted": "advisory",
+        "error_category": "strength_mismatch",
+        "clause_text": "In the absence of an adequacy decision, a controller or processor may transfer personal data to a th..."
+      },
+      {
+        "case_id": "OE-021",
+        "task": "obligation_strength_classification",
+        "expected": "conditional",
+        "predicted": "mandatory",
+        "error_category": "strength_mismatch",
+        "clause_text": "Where processing is based on consent regarding information society services offered directly to a ch..."
+      },
+      {
+        "case_id": "OE-035",
+        "task": "obligation_strength_classification",
+        "expected": "advisory",
+        "predicted": "mandatory",
+        "error_category": "strength_mismatch",
+        "clause_text": "Member States, supervisory authorities, and trade associations should encourage the drawing up of co..."
+      }
+    ]
   },
-  "clause_extraction": {
-    "precision": 1.0,
-    "recall": 1.0,
-    "f1_score": 1.0,
-    "parenting_accuracy": 1.0,
-    "sample_count": 7
+  "change_detection": {
+    "overall_type_accuracy": 1.0,
+    "significance_accuracy": 0.9333,
+    "baseline_significance_accuracy": 0.7667,
+    "sample_count": 30,
+    "dataset_composition": {
+      "unchanged_identical": 4,
+      "trivial_formatting": 3,
+      "trivial_renumbering": 1,
+      "paraphrased_equivalent": 3,
+      "substantive_deadline": 1,
+      "substantive_threshold": 1,
+      "substantive_modal": 2,
+      "substantive_scope": 1,
+      "substantive_retention": 1,
+      "semantically_similar_legally_different": 3,
+      "added_clause": 5,
+      "removed_clause": 5
+    },
+    "confusion_matrix": {
+      "UNCHANGED": {
+        "UNCHANGED": 8,
+        "MODIFIED": 0,
+        "ADDED": 0,
+        "REMOVED": 0
+      },
+      "MODIFIED": {
+        "UNCHANGED": 0,
+        "MODIFIED": 12,
+        "ADDED": 0,
+        "REMOVED": 0
+      },
+      "ADDED": {
+        "UNCHANGED": 0,
+        "MODIFIED": 0,
+        "ADDED": 5,
+        "REMOVED": 0
+      },
+      "REMOVED": {
+        "UNCHANGED": 0,
+        "MODIFIED": 0,
+        "ADDED": 0,
+        "REMOVED": 5
+      }
+    },
+    "per_class_metrics": {
+      "UNCHANGED": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "support": 8
+      },
+      "MODIFIED": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "support": 12
+      },
+      "ADDED": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "support": 5
+      },
+      "REMOVED": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "support": 5
+      }
+    },
+    "near_duplicate_warnings": [],
+    "errors": [
+      {
+        "case_id": "CD-010",
+        "task": "significance_determination",
+        "expected": "significant=False",
+        "predicted": "significant=True",
+        "error_category": "significance_judgment_mismatch",
+        "notes": "Paraphrased sentence structure conveying the exact same change control governance mandate."
+      },
+      {
+        "case_id": "CD-011",
+        "task": "significance_determination",
+        "expected": "significant=False",
+        "predicted": "significant=True",
+        "error_category": "significance_judgment_mismatch",
+        "notes": "Reworded identity verification requirement with unchanged scope and mechanism."
+      }
+    ]
   },
   "compliance_assessment": {
-    "accuracy": 1.0,
-    "precision": 1.0,
-    "recall": 1.0,
-    "f1_score": 1.0,
+    "overall_accuracy": 0.9667,
     "false_positive_rate": 0.0,
-    "sample_count": 15
+    "sample_count": 30,
+    "dataset_composition": {
+      "clearly_compliant": 3,
+      "clearly_non_compliant": 3,
+      "evidence_missing": 2,
+      "partially_sufficient": 2,
+      "irrelevant_evidence": 2,
+      "weak_semantic_similarity": 2,
+      "conflicting_evidence": 2,
+      "stale_expired_evidence": 2,
+      "valid_current_evidence": 2,
+      "ambiguous_evidence": 2,
+      "compound_partial_satisfaction": 2,
+      "multi_requirement_satisfaction": 3,
+      "misleading_buzzwords": 3
+    },
+    "confusion_matrix": {
+      "COMPLIANT": {
+        "COMPLIANT": 8,
+        "NON_COMPLIANT": 0,
+        "PARTIALLY_COMPLIANT": 0,
+        "EVIDENCE_MISSING": 0
+      },
+      "NON_COMPLIANT": {
+        "COMPLIANT": 0,
+        "NON_COMPLIANT": 14,
+        "PARTIALLY_COMPLIANT": 0,
+        "EVIDENCE_MISSING": 0
+      },
+      "PARTIALLY_COMPLIANT": {
+        "COMPLIANT": 1,
+        "NON_COMPLIANT": 0,
+        "PARTIALLY_COMPLIANT": 5,
+        "EVIDENCE_MISSING": 0
+      },
+      "EVIDENCE_MISSING": {
+        "COMPLIANT": 0,
+        "NON_COMPLIANT": 0,
+        "PARTIALLY_COMPLIANT": 0,
+        "EVIDENCE_MISSING": 2
+      }
+    },
+    "per_class_metrics": {
+      "COMPLIANT": {
+        "precision": 0.8889,
+        "recall": 1.0,
+        "f1_score": 0.9412,
+        "support": 8
+      },
+      "NON_COMPLIANT": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "support": 14
+      },
+      "PARTIALLY_COMPLIANT": {
+        "precision": 1.0,
+        "recall": 0.8333,
+        "f1_score": 0.9091,
+        "support": 6
+      },
+      "EVIDENCE_MISSING": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "support": 2
+      }
+    },
+    "near_duplicate_warnings": [],
+    "errors": [
+      {
+        "case_id": "CA-021",
+        "task": "compliance_status_assessment",
+        "expected": "PARTIALLY_COMPLIANT",
+        "predicted": "COMPLIANT",
+        "error_category": "status_discrepancy",
+        "notes": "Ambiguous language ('targeting 3 to 5 business days') creates potential compliance gaps against strict 72-hour statutory deadlines."
+      }
+    ]
   },
-  "change_detection_4step_pipeline": {
+  "hitl": {
+    "policy_routing_accuracy": 1.0,
+    "sample_count": 15,
+    "dataset_composition": {
+      "auto_apply_high_conf_low_risk": 1,
+      "auto_apply_high_conf_medium_risk": 1,
+      "mandatory_review_critical_risk": 1,
+      "mandatory_review_high_risk": 1,
+      "mandatory_review_missing_evidence": 1,
+      "auto_apply_partially_compliant_low_risk": 1,
+      "mandatory_review_partially_compliant_high_risk": 1,
+      "low_confidence_boundary": 1,
+      "low_confidence_uncertain": 1,
+      "conflicting_evidence_escalation": 1,
+      "human_approval_state_update": 1,
+      "human_rejection_state_preserved": 1,
+      "human_remediation_in_progress": 1,
+      "auto_apply_prevention_of_false_escalation": 1,
+      "auto_apply_partially_compliant_medium_risk": 1
+    },
+    "near_duplicate_warnings": [],
+    "errors": []
+  },
+  "evidence_expiry": {
     "overall_accuracy": 1.0,
-    "precision": 1.0,
-    "recall": 1.0,
-    "deadline_change_case_accuracy": 1.0,
-    "sample_count": 8
-  },
-  "change_detection_cosine_similarity_baseline": {
-    "overall_accuracy": 0.625,
-    "precision": 1.0,
-    "recall": 0.25,
-    "deadline_change_case_accuracy": 0.0,
-    "sample_count": 8
+    "sample_count": 10,
+    "dataset_composition": {
+      "valid_far_from_expiry": 1,
+      "expiring_today_boundary": 1,
+      "expired_yesterday_boundary": 1,
+      "no_expiry_date_set": 1,
+      "expiring_soon_warning_window": 1,
+      "expired_single_linked_obligation": 1,
+      "expired_multi_linked_obligations": 1,
+      "expired_with_valid_secondary_backup": 1,
+      "timezone_utc_boundary": 1,
+      "unrelated_valid_evidence_isolation": 1
+    },
+    "near_duplicate_warnings": [],
+    "errors": []
   },
   "impact_propagation": {
-    "precision": 1.0,
-    "blast_radius_containment_rate": 1.0,
-    "sample_count": 3
+    "overall_accuracy": 1.0,
+    "sample_count": 10,
+    "dataset_composition": {
+      "unchanged_clause_zero_impact": 1,
+      "modified_significant_clause_reevaluation": 1,
+      "modified_minor_wording_zero_impact": 1,
+      "added_clause_new_obligation_only": 1,
+      "removed_clause_human_review_preservation": 1,
+      "one_changed_clause_multiple_obligations": 1,
+      "multiple_changes_same_record_deduplication": 1,
+      "unrelated_clause_blast_radius_containment": 1,
+      "changed_clause_no_prior_compliance_record": 1,
+      "all_minor_changes_zero_flagged_regression": 1
+    },
+    "near_duplicate_warnings": [],
+    "errors": []
   },
-  "human_in_the_loop": {
-    "auto_applied_percentage": 0.5455,
-    "human_review_required_percentage": 0.4545,
-    "approval_rate": 0.7,
-    "edit_rate": 0.2,
-    "rejection_rate": 0.1,
-    "sample_count": 22,
-    "note": "Computed from 22 review-queue interaction events in scripts/eval_fixtures/hitl_fixture.json"
-  }
+  "total_benchmark_sample_count": 135
 }

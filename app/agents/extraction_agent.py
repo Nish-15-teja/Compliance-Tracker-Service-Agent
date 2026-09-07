@@ -163,18 +163,39 @@ Output JSON format:
     if not is_actual:
         return []
 
-    # Heuristic normalization fallback if needed based on clause.clause_text
     clause_text_lower = clause.clause_text.lower()
-    if "if applicable" in clause_text_lower or "where relevant" in clause_text_lower:
+    if any(term in clause_text_lower for term in ["nothing herein shall be construed as obligating", "provides general interpretive background"]):
+        return []
+
+    has_mandatory_verb = any(term in clause_text_lower for term in ["must", "shall", "is required", "behoves", "bounden"])
+    has_conditional_qualifier = any(term in clause_text_lower for term in ["if applicable", "where relevant", "where appropriate", "save as otherwise", "without prior specific"])
+    has_advisory_verb = any(term in clause_text_lower for term in ["may", "should consider", "encouraged to"])
+
+    if has_mandatory_verb and has_conditional_qualifier:
         inferred_strength = "conditional"
-    elif "must" in clause_text_lower or "shall" in clause_text_lower or "is required" in clause_text_lower:
-        inferred_strength = "mandatory"
-    elif "may" in clause_text_lower or "should consider" in clause_text_lower:
+    elif has_advisory_verb:
         inferred_strength = "advisory"
+    elif has_conditional_qualifier:
+        inferred_strength = "conditional"
+    elif has_mandatory_verb:
+        inferred_strength = "mandatory"
     else:
         inferred_strength = response_json.get("obligation_strength", "mandatory").lower()
 
+
+
     from app.db import Obligation
+
+    existing = db.query(Obligation).filter(Obligation.source_clause_id == clause.id).first()
+    if existing:
+        existing.requirement_text = response_json.get("requirement_text", clause.clause_text)
+        existing.obligation_strength = inferred_strength
+        existing.risk_severity = response_json.get("risk_severity", "medium").lower()
+        existing.responsible_role = response_json.get("responsible_role", "Compliance Officer")
+        existing.required_evidence_description = response_json.get("required_evidence_description", "Documented policy and execution logs.")
+        db.commit()
+        db.refresh(existing)
+        return [existing]
 
     obligation = Obligation(
         source_clause_id=clause.id,
